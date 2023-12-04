@@ -23,56 +23,54 @@ function App() {
     let resultDiv = <div></div>
 
     return (
-        <div className="App">
+        <Grid container spacing={2} justifyContent="center" alignItems="center"
+              style={{backgroundColor: "#282c34", height: "100vh"}}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-                <Grid item xs={12} style={{backgroundColor: "#282c34", height: "100vh"}}>
-                    <Grid item xs={12} md={4}
-                          style={{marginTop: "25%", marginLeft: "25%", backgroundColor: "rgba(0,0,0,.2"}}>
-                        <Grid container spacing={2} justifyContent="center" alignItems="center">
-                            <Grid item md={4}>
-                                <CustomTextField
-                                    label="Symbol"
-                                    type=""
-                                    value={symbol}
-                                    setter={setSymbol}
-                                    autofocus={true}
-                                />
-                            </Grid>
+                <Grid item md={6} style={{backgroundColor: "rgba(0,0,0,.2"}}>
+                    <Grid container spacing={2} justifyContent="center" alignItems="space-evenly">
+                    <Grid item md={2}>
+                        <CustomTextField
+                            label="Symbol"
+                            type=""
+                            value={symbol}
+                            setter={setSymbol}
+                            autofocus={true}
+                        />
+                    </Grid>
 
-                            <Grid item xs={12} md={4}>
-                                <CustomTextField
-                                    label="Expression"
-                                    type=""
-                                    value={expression}
-                                    setter={setExpression}
-                                />
-                            </Grid>
+                    <Grid item xs={12} md={2}>
+                        <CustomTextField
+                            label="Expression"
+                            type=""
+                            value={expression}
+                            setter={setExpression}
+                        />
+                    </Grid>
 
-                            {showResults && <Grid item xs={12}>
-                                <ResultsForm results={results}/>
-                            </Grid>}
-
-                            <Grid item xs={12} md={4}>
-                                <Button onClick={async () => {
-                                    let results = await sendTranscriptRequest(symbol, expression, setResults);
-                                    if (results) {
-                                        setResults(results);
-                                        setShowResults(true);
-                                    } else {
-                                        alert("No results found");
-                                    }
-                                }}>Submit</Button>
-                                {showResults && <Button onClick={() => {
-                                    setShowResults(false);
-                                    setSymbol("");
-                                    setExpression("");
-                                }}>Reset</Button>}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={12} md={2}>
+                        <Button onClick={async () => {
+                            let results = await sendTranscriptRequest(symbol, expression, setResults);
+                            if (results) {
+                                setResults(results);
+                                setShowResults(true);
+                            } else {
+                                alert("No results found");
+                            }
+                        }}>Submit</Button>
+                        {showResults && <Button onClick={() => {
+                            setShowResults(false);
+                            setSymbol("");
+                            setExpression("");
+                        }}>Reset</Button>}
+                    </Grid>
+                        {showResults && <Grid item xs={12}>
+                            <ResultsForm results={results}/>
+                        </Grid>}
                     </Grid>
                 </Grid>
             </Grid>
-        </div>
+        </Grid>
+
     );
 }
 
