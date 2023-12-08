@@ -13,11 +13,8 @@ function App() {
     const [results, setResults] = useState({
         "symbol": "symbol",
         "expression": "expression",
-        "results": {
-            "volatility": "0%",
-            "lag": "0",
-            "confidence": "0%"
-        }
+        "changes": "changes",
+        "percent": "percent"
     });
 
     let resultDiv = <div></div>
@@ -80,9 +77,9 @@ async function sendTranscriptRequest(symbol: string, expression: string, setResu
         return;
     } else {
         try {
-            const apiUrl = 'https://lpqj6fl9l8.execute-api.us-east-2.amazonaws.com/dev/transcript';
+            const apiUrl = 'http://localhost:8000/transcript';
             const headers = {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-Type': 'application/json; charset=UTF-8'
             };
             const requestBody = {
                 symbol: symbol,
