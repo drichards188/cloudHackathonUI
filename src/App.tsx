@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Button, Grid} from "@mui/material";
+import {Button, CircularProgress, Grid} from "@mui/material";
 import CustomTextField from "./CustomTextField";
 import axios from "axios";
 import ResultsForm from "./ResultsForm";
@@ -10,69 +10,76 @@ function App() {
     const [symbol, setSymbol] = useState("");
     const [expression, setExpression] = useState("");
     const [showResults, setShowResults] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [results, setResults] = useState({
         "symbol": "symbol",
         "expression": "expression",
-        "results": {
-            "volatility": "0%",
-            "lag": "0",
-            "confidence": "0%"
-        }
+        "changes": "changes",
+        "percent": "percent"
     });
 
     let resultDiv = <div></div>
 
+    let loadingCircle = <></>;
+
+    if (isLoading) {
+        loadingCircle = <CircularProgress />;
+    }
+
     return (
-        <div className="App">
+        <Grid container spacing={2} justifyContent="center" alignItems="center"
+              style={{backgroundColor: "#282c34", height: "100vh"}}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-                <Grid item xs={12} style={{backgroundColor: "#282c34", height: "100vh"}}>
-                    <Grid item xs={12} md={4}
-                          style={{marginTop: "25%", marginLeft: "25%", backgroundColor: "rgba(0,0,0,.2"}}>
-                        <Grid container spacing={2} justifyContent="center" alignItems="center">
-                            <Grid item md={4}>
-                                <CustomTextField
-                                    label="Symbol"
-                                    type=""
-                                    value={symbol}
-                                    setter={setSymbol}
-                                    autofocus={true}
-                                />
-                            </Grid>
 
-                            <Grid item xs={12} md={4}>
-                                <CustomTextField
-                                    label="Expression"
-                                    type=""
-                                    value={expression}
-                                    setter={setExpression}
-                                />
-                            </Grid>
+                <Grid item md={6} style={{backgroundColor: "rgba(0,0,0,.2"}}>
+                    <Grid container spacing={2} justifyContent="center" alignItems="space-evenly">
+                        {loadingCircle}
+                    <Grid item md={2}>
+                        <CustomTextField
+                            label="Symbol"
+                            type=""
+                            value={symbol}
+                            setter={setSymbol}
+                            autofocus={true}
+                        />
+                    </Grid>
 
-                            {showResults && <Grid item xs={12}>
-                                <ResultsForm results={results}/>
-                            </Grid>}
+                    <Grid item xs={12} md={2}>
+                        <CustomTextField
+                            label="Expression"
+                            type=""
+                            value={expression}
+                            setter={setExpression}
+                        />
+                    </Grid>
 
-                            <Grid item xs={12} md={4}>
-                                <Button onClick={async () => {
-                                    let results = await sendTranscriptRequest(symbol, expression, setResults);
-                                    if (results) {
-                                        setResults(results);
-                                        setShowResults(true);
-                                    } else {
-                                        alert("No results found");
-                                    }
-                                }}>Submit</Button>
-                                {showResults && <Button onClick={() => {
-                                    setShowResults(false);
-                                    setSymbol("");
-                                    setExpression("");
-                                }}>Reset</Button>}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={12} md={2}>
+                        <Button onClick={async () => {
+                            setIsLoading(true);
+                            let results = await sendTranscriptRequest(symbol, expression, setResults);
+                            if (results) {
+                                setIsLoading(false);
+                                setResults(results);
+                                setShowResults(true);
+                            } else {
+                                setIsLoading(false);
+                                alert("No results found");
+                            }
+                        }}>Submit</Button>
+                        {showResults && <Button onClick={() => {
+                            setShowResults(false);
+                            setSymbol("");
+                            setExpression("");
+                        }}>Reset</Button>}
+                    </Grid>
+                        {showResults && <Grid item xs={12}>
+                            <ResultsForm results={results}/>
+                        </Grid>}
                     </Grid>
                 </Grid>
             </Grid>
-        </div>
+        </Grid>
+
     );
 }
 
@@ -82,9 +89,9 @@ async function sendTranscriptRequest(symbol: string, expression: string, setResu
         return;
     } else {
         try {
-            const apiUrl = 'https://lpqj6fl9l8.execute-api.us-east-2.amazonaws.com/dev/transcript';
+            const apiUrl = 'http://localhost:8000/transcript';
             const headers = {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-Type': 'application/json; charset=UTF-8'
             };
             const requestBody = {
                 symbol: symbol,
