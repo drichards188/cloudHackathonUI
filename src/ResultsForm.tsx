@@ -3,22 +3,23 @@ import React from "react";
 import TradingViewWidget from "./TradingViewChart";
 
 const ResultsForm = ({results}: any) => {
-    const datesList: string[] = [];
-    for (let date in results.dates) {
-        datesList.push(date);
+    const datesList: any[] = [];
+    for (let date in results.dates.expression_count) {
+        let item: any[] = [date, results.dates[date]];
+        datesList.push(item);
     }
 
     return (
         <Grid container spacing={2} justifyContent="space-between" alignItems="center">
             <Grid item xs={12} md={2}>
                 <h2 style={{color: "grey"}}>Symbol</h2>
-                <h1 style={{color: "wheat"}}>{results.symbol}</h1>
+                <h1 style={{color: "wheat"}}>{results.symbol.toUpperCase()}</h1>
                 <h2 style={{color: "grey"}}>Query Expression</h2>
                 <h2 style={{color: "wheat"}}>{results.expression}</h2>
             </Grid>
             <Grid item md={2}>
-                <h2 style={{color: "grey"}}>Earning call date</h2>
-                {datesList.map((change: any) => (<h3 style={{color: "wheat"}}>{change}</h3>)
+                <h2 style={{color: "grey"}}>Transcript date  & query count</h2>
+                {datesList.map((change: any) => (<h3 style={{color: "wheat"}}>{change[0]} | {change[1]} hits</h3>)
                 )}
             </Grid>
                 <Grid item md={2}>
