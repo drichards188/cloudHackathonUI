@@ -4,7 +4,7 @@ let tvScriptLoadingPromise: any;
 
 export default function TradingViewWidget(props: any) {
   const onLoadScriptRef = useRef();
-  const [chartSymbol, setChartSymbol] = useState("BITSTAMP:XRPUSD");
+  const [chartSymbol, setChartSymbol] = useState("NASDAQ:AAPL");
 
   useEffect(() => {
     if (props.symbol !== undefined && props.symbol !== chartSymbol) {
@@ -16,23 +16,11 @@ export default function TradingViewWidget(props: any) {
         case "ibm":
           translatedSymbol = "NYSE:IBM";
           break;
-        case "btc":
-          translatedSymbol = "BITSTAMP:BTCUSD";
-          break;
-        case "eth":
-          translatedSymbol = "BITSTAMP:ETHUSD";
-          break;
-        case "usdt":
-          translatedSymbol = "BITSTAMP:USDTUSD";
-          break;
-        case "bnb":
-          translatedSymbol = "BINANCE:BNBUSD";
-          break;
-        case "xrp":
-          translatedSymbol = "BITSTAMP:XRPUSD";
+        case "fl":
+          translatedSymbol = "NYSE:FL";
           break;
         default:
-          translatedSymbol = "BITSTAMP:XRPUSD";
+          translatedSymbol = "NASDAQ:AAPL";
       }
       setChartSymbol(translatedSymbol);
     }

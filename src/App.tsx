@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Button, CircularProgress, Grid} from "@mui/material";
 import CustomTextField from "./CustomTextField";
@@ -17,8 +16,6 @@ function App() {
         "changes": "changes",
         "percent": "percent"
     });
-
-    let resultDiv = <div></div>
 
     let loadingCircle = <></>;
 
@@ -38,7 +35,7 @@ function App() {
                         <CustomTextField
                             label="Symbol"
                             type=""
-                            value={symbol}
+                            value={symbol.toUpperCase()}
                             setter={setSymbol}
                             autofocus={true}
                         />
@@ -73,7 +70,7 @@ function App() {
                         }}>Reset</Button>}
                     </Grid>
                         {showResults && <Grid item xs={12}>
-                            <ResultsForm results={results}/>
+                            <ResultsForm results={results} symbol={symbol}/>
                         </Grid>}
                     </Grid>
                 </Grid>
@@ -103,7 +100,6 @@ async function sendTranscriptRequest(symbol: string, expression: string, setResu
             if (response.status === 200) {
                 console.log('POST request successful');
                 console.log('Response:', response.data);
-                // alert(JSON.stringify(response.data));
                 return response.data;
             } else {
                 console.error('POST request failed with status:', response.status);
